@@ -70,7 +70,7 @@ const Attendance = () => {
           }}
         />
       </View>
-      <Button title="Submit" buttonStyle={{ backgroundColor: "#4361c4", margin: 10 }} onPress={() => {}} />
+      <Button title="Submit" buttonStyle={{ backgroundColor: "#4361c4", margin: 10, padding: 12 }} onPress={() => {}} />
     </View>
   );
 };

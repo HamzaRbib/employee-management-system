@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import React, { useLayoutEffect } from "react";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -28,17 +28,7 @@ const EmployeeList = () => {
         <Ionicons name="add-circle" size={70} color="#4361c4" />
       </TouchableOpacity>
       <ScrollView>
-        <Employee />
-        <Employee />
-        <Employee />
-        <Employee />
-        <Employee />
-        <Employee />
-        <Employee />
-        <Employee />
-        <Employee />
-        <Employee />
-        <Employee />
+        <Employee onPress={() => {}} />
       </ScrollView>
     </View>
   );
