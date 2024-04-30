@@ -7,6 +7,8 @@ import MarkAttendance from './screens/MarkAttendance';
 import Attendance from './screens/Attendance';
 import AttendanceReport from './screens/AttendanceReport';
 import AttendanceList from './screens/AttendanceList';
+import SummaryReport from './screens/SummaryReport';
+import AllGenerateReports from './screens/AllGenerateReports';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -20,6 +22,8 @@ export default function App() {
         <Stack.Screen name="Attendance" component={Attendance} />
         <Stack.Screen name="AttendanceReport" component={AttendanceReport} />
         <Stack.Screen name="AttendanceList" component={AttendanceList} />
+        <Stack.Screen name="SummaryReport" component={SummaryReport} />
+        <Stack.Screen name="AllGenerateReports" component={AllGenerateReports} />
       </Stack.Navigator>
     </NavigationContainer>
   );
