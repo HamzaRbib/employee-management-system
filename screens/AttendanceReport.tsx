@@ -9,7 +9,7 @@ const AttendanceReport = () => {
   const [employees, setEmployees] = useState<Array<EmployeeType>>([]);
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Employee List",
+      title: "Attendance Report List",
       headerTitleAlign: "center",
       headerSearchBarOptions: {
         onChangeText: (event: { nativeEvent: { text: any } }) => {

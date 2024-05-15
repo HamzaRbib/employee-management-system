@@ -1,7 +1,6 @@
 import { View } from "react-native";
-import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import DateSwitcher from "../components/DateSwitcher";
 import Employee from "../components/Employee";
 import { FlatList } from "react-native";
 import EmployeeType from "../types/Employee";
@@ -37,9 +36,7 @@ const MarkAttendance = () => {
 
   return (
     <View>
-      <DateSwitcher />
       <FlatList
-        className="mt-12"
         showsVerticalScrollIndicator={false}
         data={employees}
         renderItem={({ item }) => (

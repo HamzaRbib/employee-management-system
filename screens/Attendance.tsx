@@ -12,9 +12,42 @@ import { Ionicons } from "@expo/vector-icons";
 const Attendance = ({route}: {route: {params: {employee: EmployeeType}}}) => {
   const navigation: NavigationProp<any, any> = useNavigation();
   const {employee} = route.params;
-  const [value, setValue] = useState<string>("present");
+  const [date, setDate] = useState<Date>(new Date());
+  const [status, setStatus] = useState<string>("present");
   const [advance, setAdvance] = useState<string>("");
   const [bonus, setBonus] = useState<string>("");
+
+  const statusColor = () => {
+    if (status === "present") {
+      return "#3eaf79";
+    } else if (status === "absent") {
+      return "#fc6461";
+    }else if (status === "halfDay") {
+      return "#f4ae69";
+    }
+    return "#21b1ca";
+  }
+
+  const submitAttendance = () => {
+    fetch("http://10.0.2.2:5000/markAttendance", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        employeeId: employee.employeeId,
+        date: date,
+        status: status,
+        advance: advance.length > 0 ? advance : "0",
+        bonus: bonus.length > 0 ? bonus : "0",
+      }),
+    })
+    .then((response) => {
+      navigation.goBack();
+      navigation.navigate("MarkAttendance");
+    })
+    .catch((error) => console.error(error));
+  }
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -32,11 +65,23 @@ const Attendance = ({route}: {route: {params: {employee: EmployeeType}}}) => {
       ),
     });
   });
+  function getTodayPayment() {
+    if (status === "present" || status === "holiday") {
+      return employee.salary / 24;
+    }else if (status === "halfDay") {
+      return employee.salary / 48;
+    }
+    return 0;
+  }
+
   return (
     <View>
-      <DateSwitcher />
+      <DateSwitcher date={date} setDate={setDate} />
       <View className="mt-12">
         <Employee employee={employee} onPress={() => {}} />
+        <View style={{backgroundColor: statusColor()}} className="w-10 h-10 rounded-md items-center justify-center absolute right-5 top-4">
+          <Text className="text-white text-xl">{status[0].toUpperCase()}</Text>
+        </View>
         <Text className="text-lg mx-3">Basic Pay : {employee.salary}</Text>
       </View>
       <View>
@@ -44,8 +89,8 @@ const Attendance = ({route}: {route: {params: {employee: EmployeeType}}}) => {
           Attendance
         </Text>
         <RadioButton.Group
-          onValueChange={(newValue) => setValue(newValue)}
-          value={value}
+          onValueChange={(newValue) => setStatus(newValue)}
+          value={status}
         >
           <View className="flex-row justify-evenly">
             <View>
@@ -63,7 +108,7 @@ const Attendance = ({route}: {route: {params: {employee: EmployeeType}}}) => {
         <TextInput
         className="w-1/2 mr-2"
           mode="outlined"
-          placeholder="Enter value"
+          placeholder=""
           label={"Advance/Loan"}
           value={advance}
           keyboardType="numeric"
@@ -74,7 +119,7 @@ const Attendance = ({route}: {route: {params: {employee: EmployeeType}}}) => {
         <TextInput
         className="w-1/2 ml-2"
           mode="outlined"
-          placeholder="Enter value"
+          placeholder=""
           label={"Extra bonus"}
           value={bonus}
           keyboardType="numeric"
@@ -83,7 +128,10 @@ const Attendance = ({route}: {route: {params: {employee: EmployeeType}}}) => {
           }}
         />
       </View>
-      <Button title="Submit" buttonStyle={{ backgroundColor: "#4361c4", margin: 10, padding: 12 }} onPress={() => {}} />
+      <View className="m-2">
+        <Text className="text-lg font-bold text-stone-400">Today Payment : {getTodayPayment().toFixed(2)}</Text>
+      </View>
+      <Button title="Submit" buttonStyle={{ backgroundColor: "#4361c4", margin: 10, padding: 12 }} onPress={() => submitAttendance()} />
     </View>
   );
 };

@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-const DateSwitcher = () => {
-  const [date, setDate] = useState<Date>(new Date());
+const DateSwitcher = ({date, setDate}: {date: Date, setDate: React.Dispatch<React.SetStateAction<Date>>}) => {
   const [open, setOpen] = useState<boolean>(false);
   return (
     <View className="flex-row items-center justify-center p-2 absolute top-0 w-full bg-white z-10">
