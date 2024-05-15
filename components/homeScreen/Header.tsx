@@ -3,9 +3,10 @@ import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { FontAwesome5 } from '@expo/vector-icons';
-import { NavigationProp } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 
-const ManageEmployee = ({ navigation }: { navigation: NavigationProp<any, any> }) => {
+const ManageEmployee = () => {
+  const navigation: NavigationProp<any, any> = useNavigation();
   return (
     <View className="flex-row justify-between mx-3">
       <Card

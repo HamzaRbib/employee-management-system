@@ -2,11 +2,12 @@ import { View, Text } from "react-native";
 import React from "react";
 import Employee from "./Employee";
 import { DataTable } from "react-native-paper";
+import EmployeeType from "../types/Employee";
 
-const Summary = () => {
+const Summary = ({employee}: {employee: EmployeeType}) => {
   return (
     <View className="bg-white m-2" style={{elevation: 10, shadowColor: "#52006A"}}>
-      <Employee onPress={() => null} />
+      <Employee employee={employee} onPress={() => null} />
       <DataTable>
         <DataTable.Row>
           <DataTable.Cell

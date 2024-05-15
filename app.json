@@ -2,14 +2,17 @@
   "expo": {
     "name": "employee-management-app",
     "slug": "employee-management-app",
+    "androidStatusBar":{
+      "hidden":true
+    },
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/manager.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash1.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#5893d4"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -21,10 +24,10 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "web": {
+        "favicon": "./assets/favicon.png"
       }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
     }
   }
 }

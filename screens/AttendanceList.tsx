@@ -4,20 +4,31 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import Employee from "../components/Employee";
 import Calendar from "../components/Calendar";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { Ionicons } from "@expo/vector-icons";
 
-const AttendanceList = () => {
+const AttendanceList = ({route}: {route: {params: {employee: any}}}) => {
   const navigation: NavigationProp<any, any> = useNavigation();
+  const {employee} = route.params;
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "Attendance List",
       headerTitleAlign: "center",
+      headerLeft: () => (
+        <Pressable
+          onPress={() => {
+            navigation.goBack();
+            navigation.navigate("AttendanceReport");
+          }}>
+          <Ionicons name="arrow-back" size={24} color="black" />
+        </Pressable>
+      )
     });
   });
   return (
     <View>
-      <Employee onPress={() => {}} />
+      <Employee employee={employee} onPress={() => {}} />
       <Pressable className="items-center" onPress={() => setOpen(true)}>
         <Calendar date={date} />
       </Pressable>

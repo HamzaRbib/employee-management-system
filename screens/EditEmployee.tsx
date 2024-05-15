@@ -1,5 +1,6 @@
-import { View, Text, Pressable, ScrollView } from "react-native";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import EmployeeType from "../types/Employee";
+import { View, Text, Pressable, ScrollView, Alert } from "react-native";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import CountryPicker, {
   Country,
@@ -8,28 +9,40 @@ import CountryPicker, {
 import AnimatedTextInput from "react-native-animated-placeholder-textinput";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Button, Switch } from "react-native-elements";
-import EmployeeType from "../types/Employee";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
-const AddEmployee = ({
+const EditEmployee = ({
   route,
 }: {
-  route: { params: { employees: Array<EmployeeType> } };
+  route: { params: { employee: EmployeeType; employees: Array<EmployeeType> } };
 }) => {
-  const { employees } = route.params;
+  const employee = route.params.employee;
+  const employees = route.params.employees;
   const navigation: NavigationProp<any, any> = useNavigation();
-  const [countryCode, setCountryCode] = useState<CountryCode>("US");
-  const [countryName, setCountryName] = useState<string>("United States");
+  const [countryCode, setCountryCode] = useState<CountryCode>(
+    employee.country.countryCode as CountryCode
+  );
+  const [countryName, setCountryName] = useState<string>(
+    employee.country.countryName
+  );
   const [country, setCountry] = useState<Country>();
-  const [fullName, setFullName] = useState<string>("");
-  const [employeeId, setEmployeeId] = useState<string>("");
-  const [designation, setDesignation] = useState<string>("");
-  const [phoneNumber, setMobileNumber] = useState<string>("");
-  const [date, setDate] = useState<Date>(new Date());
+  const [fullName, setFullName] = useState<string>(employee.employeeName);
+  const [employeeId, setEmployeeId] = useState<string>(employee.employeeId);
+  const [designation, setDesignation] = useState<string>(employee.designation);
+  const [phoneNumber, setMobileNumber] = useState<string>(employee.phoneNumber);
+  const [date, setDate] = useState<Date>(new Date(employee.dateOfBirth));
   const [dateOpen, setDateOpen] = useState<boolean>(false); // open and close date picker
   const [joiningDateOpen, setJoiningDateOpen] = useState<boolean>(false);
-  const [joiningDate, setJoiningDate] = useState<Date>(new Date());
-  const [employeeSalary, setEmployeeSalary] = useState<string>("0");
-  const [activeEmployee, setActiveEmployee] = useState<boolean>(false);
+  const [joiningDate, setJoiningDate] = useState<Date>(
+    new Date(employee.joiningDate)
+  );
+  const [employeeSalary, setEmployeeSalary] = useState<string>(
+    employee.salary.toString()
+  );
+  const [activeEmployee, setActiveEmployee] = useState<boolean>(
+    employee.isActive
+  );
 
   useEffect(() => {
     if (country) {
@@ -40,23 +53,18 @@ const AddEmployee = ({
 
   const saveData = () => {
     if (fullName && employeeId && designation && phoneNumber) {
+      const curerntEmployeeId = employeeId;
       if (
-        employees.find((employee) => employee.employeeId === employeeId) !==
+        employees.find((employee) => employee.employeeId === employeeId && employee.employeeId !== curerntEmployeeId) !==
         undefined
       ) {
         alert("Employee ID already exists");
         return;
       }
-      fetch("http://10.0.2.2:5000/addEmployee", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      fetch("http://10.0.2.2:5000/editEmployee/" + employeeId, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          country: {
-            countryCode,
-            countryName,
-          },
           employeeName: fullName,
           employeeId,
           designation,
@@ -65,6 +73,10 @@ const AddEmployee = ({
           joiningDate,
           salary: employeeSalary,
           isActive: activeEmployee,
+          country: {
+            countryCode,
+            countryName,
+          },
         }),
       })
         .then((response) => {
@@ -75,16 +87,64 @@ const AddEmployee = ({
         .catch((error) => {
           console.error(error);
         });
-      return;
+        return
     }
     alert("Please fill all the fields");
   };
 
+  const deleteData = () => {
+    fetch("http://10.0.2.2:5000/deleteEmployee/" + employeeId, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        console.log(response);
+        navigation.goBack();
+        navigation.navigate("EmployeeList");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Add Employee",
+      headerTitle: "Edit Employee",
       headerTitleAlign: "center",
-      headerLeft: () => <></>,
+      headerLeft: () => (
+        <Pressable
+          onPress={() => {
+            navigation.goBack();
+            navigation.navigate("EmployeeList");
+          }}
+        >
+          <Ionicons name="arrow-back" size={24} color="black" />
+        </Pressable>
+      ),
+      headerRight: () => (
+        <Pressable
+          className="mr-3"
+          onPress={() => {
+            Alert.alert(
+              "Delete Employee",
+              "Are you sure you want to delete this employee?",
+              [
+                {
+                  text: "Cancel",
+                  onPress: () => console.log("Cancel Pressed"),
+                  style: "cancel",
+                },
+                {
+                  text: "OK",
+                  style: "destructive",
+                  onPress: () => deleteData(),
+                },
+              ]
+            );
+          }}
+        >
+          <FontAwesome5 name="trash" size={24} color="red" />
+        </Pressable>
+      ),
     });
   }, []);
   return (
@@ -106,7 +166,7 @@ const AddEmployee = ({
       <View className="m-2">
         <Text className="text-xl font-bold mb-1.5">Full Name :</Text>
         <AnimatedTextInput
-          placeholder="Enter full name"
+          placeholder="Edit full name"
           value={fullName}
           textInputProps={{}}
           onChangeText={(text) => {
@@ -117,7 +177,7 @@ const AddEmployee = ({
       <View className="m-2">
         <Text className="text-xl font-bold mb-1.5">Employee ID :</Text>
         <AnimatedTextInput
-          placeholder="Enter employee ID"
+          placeholder="Edit employee ID"
           value={employeeId}
           textInputProps={{}}
           onChangeText={(text) => {
@@ -128,7 +188,7 @@ const AddEmployee = ({
       <View className="m-2">
         <Text className="text-xl font-bold mb-1.5">Designation :</Text>
         <AnimatedTextInput
-          placeholder="Enter designation"
+          placeholder="Edit designation"
           value={designation}
           textInputProps={{}}
           onChangeText={(text) => {
@@ -139,7 +199,7 @@ const AddEmployee = ({
       <View className="m-2">
         <Text className="text-xl font-bold mb-1.5">Mobile Number :</Text>
         <AnimatedTextInput
-          placeholder="Enter mobile number"
+          placeholder="Edit mobile number"
           value={phoneNumber}
           textInputProps={{
             keyboardType: "number-pad",
@@ -194,7 +254,7 @@ const AddEmployee = ({
       <View className="m-2">
         <Text className="text-xl font-bold mb-1.5">Employee Salary :</Text>
         <AnimatedTextInput
-          placeholder="Enter employee salary"
+          placeholder="Edit employee salary"
           value={employeeSalary}
           textInputProps={{
             keyboardType: "number-pad",
@@ -242,4 +302,4 @@ const AddEmployee = ({
   );
 };
 
-export default AddEmployee;
+export default EditEmployee;
