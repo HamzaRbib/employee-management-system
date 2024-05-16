@@ -6,14 +6,7 @@ import Calendar from "../components/Calendar";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
 import EmployeeType from "../types/Employee";
-
-type AttendanceType = {
-  employeeId: string;
-  date: string;
-  status: string;
-  advance: string;
-  bonus: string;
-};
+import AttendanceType from "../server/types/Attendance";
 
 const AttendanceList = ({
   route,

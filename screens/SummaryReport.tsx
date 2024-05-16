@@ -1,11 +1,10 @@
 import { View, Text, Pressable, FlatList } from "react-native";
-import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import Calendar from "../components/Calendar";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Summary from "../components/Summary";
 import EmployeeType from "../types/Employee";
-import { EmployeeContext } from "../contexts/employeeContext";
 
 const SummaryReport = () => {
   const navigation: NavigationProp<any, any> = useNavigation();
@@ -41,7 +40,7 @@ const SummaryReport = () => {
       ),
       headerTitleAlign: "center",
     });
-  }, []);
+  }, [date]);
 
   useEffect(() => {
     fetch("http://10.0.2.2:5000/getAllEmployees")
@@ -51,7 +50,7 @@ const SummaryReport = () => {
   }, []);
 
   return (
-    <View>
+    <View className="flex-1">
       {open && (
         <DateTimePicker
           mode="date"
@@ -66,7 +65,8 @@ const SummaryReport = () => {
       )}
       <FlatList
         data={employees}
-        renderItem={({ item }) => <Summary employee={item} />}
+        extraData={date}
+        renderItem={({ item }) => <Summary employee={item} date={date} />}
       />
     </View>
   );

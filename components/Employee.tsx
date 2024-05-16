@@ -1,6 +1,5 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { Touchable } from "react-native";
 import { TouchableOpacity } from "react-native";
 import EmployeeType from "../server/types/Employee";
 
