@@ -2,8 +2,8 @@
   "expo": {
     "name": "employee-management-app",
     "slug": "employee-management-app",
-    "androidStatusBar":{
-      "hidden":true
+    "androidStatusBar": {
+      "hidden": true
     },
     "version": "1.0.0",
     "orientation": "portrait",
@@ -28,6 +28,14 @@
       "web": {
         "favicon": "./assets/favicon.png"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": ["./assets/fonts/Inter-Black.otf"]
+        }
+      ]
+    ]
   }
 }

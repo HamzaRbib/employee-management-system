@@ -3,7 +3,6 @@ interface EmployeeType {
     employeeName: string;
     designation: string;
     joiningDate: Date;
-    dateOfBirth: Date;
     salary: number;
     isActive: boolean;
     phoneNumber: string;
@@ -11,6 +10,7 @@ interface EmployeeType {
         countryCode: string;
         countryName: string;
     };
+    userId: string;
     createdAt?: Date;
 }
 

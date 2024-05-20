@@ -4,10 +4,12 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import Employee from "../components/Employee";
 import { FlatList } from "react-native";
 import EmployeeType from "../types/Employee";
+import { FirebaseAuthInstance } from "../FirebaseConfig";
 
 const MarkAttendance = () => {
   const navigation: NavigationProp<any, any> = useNavigation();
   const [employees, setEmployees] = useState<Array<EmployeeType>>([]);
+  const userId = FirebaseAuthInstance.currentUser?.uid;
   useLayoutEffect(() => {
     navigation.setOptions({
       headerSearchBarOptions: {
@@ -28,9 +30,9 @@ const MarkAttendance = () => {
   }, []);
 
   useEffect(() => {
-    fetch("http://10.0.2.2:5000/getAllEmployees")
+    fetch("http://10.0.2.2:5000/getAllEmployees/" + userId)
       .then((response) => response.json())
-      .then((data) => setEmployees(data))
+      .then((data) => setEmployees(data.filter((employee: EmployeeType) => employee.isActive === true)))
       .catch((error) => console.error(error));
   }, []);
 

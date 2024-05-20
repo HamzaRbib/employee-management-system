@@ -5,12 +5,14 @@ import Calendar from "../components/Calendar";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Summary from "../components/Summary";
 import EmployeeType from "../types/Employee";
+import { FirebaseAuthInstance } from "../FirebaseConfig";
 
 const SummaryReport = () => {
   const navigation: NavigationProp<any, any> = useNavigation();
   const [employees, setEmployees] = useState<Array<EmployeeType>>([]);
   const [date, setDate] = useState<Date>(new Date());
   const [open, setOpen] = useState<boolean>(false);
+  const userId = FirebaseAuthInstance.currentUser?.uid;
   useLayoutEffect(() => {
     navigation.setOptions({
       headerSearchBarOptions: {
@@ -43,9 +45,9 @@ const SummaryReport = () => {
   }, [date]);
 
   useEffect(() => {
-    fetch("http://10.0.2.2:5000/getAllEmployees")
+    fetch("http://10.0.2.2:5000/getAllEmployees/" + userId)
       .then((response) => response.json())
-      .then((data) => setEmployees(data))
+      .then((data) => setEmployees(data.filter((employee: EmployeeType) => employee.isActive === true)))
       .catch((error) => console.error(error));
   }, []);
 

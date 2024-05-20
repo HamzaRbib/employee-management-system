@@ -19,11 +19,7 @@ const employee = new Schema({
     joiningDate: {
         type: Date,
         required: true
-    },
-    dateOfBirth: {
-        type: Date,
-        required: true
-    },
+    }, 
     salary: {
         type: String,
         required: true
@@ -41,6 +37,10 @@ const employee = new Schema({
             countryCode: String,
             countryName: String
         },
+        required: true
+    },
+    userId: {
+        type: String,
         required: true
     },
     createdAt: {

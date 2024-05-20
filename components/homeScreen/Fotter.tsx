@@ -5,8 +5,8 @@ import { MaterialIcons, Feather, FontAwesome6, MaterialCommunityIcons } from "@e
 
 const MoreEmployeeInfo = () => {
   return (
-    <View className="flex-row justify-between px-3">
-      <View>
+    <View className="flex-row mt-2">
+      <View className="flex-1 ml-2">
         <Card
           title="Attendence Criteria"
           icon={<MaterialIcons name="rule" size={26} color="black" />}
@@ -18,7 +18,7 @@ const MoreEmployeeInfo = () => {
           color={"#10b981"}
         />
       </View>
-      <View>
+      <View className="flex-1 mr-2">
         <Card
           title="Cost Savings"
           icon={<FontAwesome6 name="money-check-dollar" size={26} color="black" />}
@@ -38,8 +38,8 @@ export default MoreEmployeeInfo;
 
 const Card = ({ title, icon, color }: { title: string; icon: JSX.Element, color: string }) => {
   return (
-    <TouchableOpacity>
-      <View className="items-center w-[180px] p-3 rounded-lg mt-3" style={{ backgroundColor: color }}>
+    <TouchableOpacity className="px-1">
+      <View className="items-center p-3 rounded-lg mt-3" style={{ backgroundColor: color }}>
         <View className="bg-white h-12 w-12 rounded-xl items-center justify-center mb-2">
           {icon}
         </View>

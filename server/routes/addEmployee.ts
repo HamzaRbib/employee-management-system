@@ -15,6 +15,7 @@ router.post("/addEmployee", async (req, res) => {
       isActive,
       phoneNumber,
       country,
+      userId
     } = req.body;
     const newEmployee = new Employee({
       employeeId,
@@ -26,6 +27,7 @@ router.post("/addEmployee", async (req, res) => {
       isActive,
       phoneNumber,
       country,
+      userId
     });
     await newEmployee.save();
     res.send({ message: "Employee added successfully" });

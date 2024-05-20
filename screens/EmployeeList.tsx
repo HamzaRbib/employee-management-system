@@ -6,10 +6,12 @@ import { FlatList } from "react-native";
 import { FAB } from "react-native-paper";
 import Employee from "../components/Employee";
 import { EmployeeContext } from "../contexts/employeeContext";
+import { FirebaseAuthInstance } from "../FirebaseConfig";
 
 const EmployeeList = () => {
   const navigation: NavigationProp<any, any> = useNavigation();
   const [employees, setEmployees] = useState<Array<EmployeeType>>([]);
+  const userId = FirebaseAuthInstance.currentUser?.uid;
   useLayoutEffect(() => {
     navigation.setOptions({
       headerSearchBarOptions: {
@@ -30,7 +32,7 @@ const EmployeeList = () => {
   }, []);
 
   useEffect(() => {
-    fetch("http://10.0.2.2:5000/getAllEmployees")
+    fetch("http://10.0.2.2:5000/getAllEmployees/" + userId)
       .then((response) => response.json())
       .then((data) => setEmployees(data))
       .catch((error) => console.error(error));

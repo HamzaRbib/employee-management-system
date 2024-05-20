@@ -2,9 +2,10 @@ import express from "express";
 import Employee from "../model/employee";
 
 const router = express.Router();
-router.get("/getAllEmployees", async (req, res) => {
+router.get("/getAllEmployees/:id", async (req, res) => {
     try{
-        const employees = await Employee.find();
+        const userId = req.params.id
+        const employees = await Employee.find({userId: userId});
         console.log("Successfully got all employees yes")
         res.send(employees);
     }catch (err){
